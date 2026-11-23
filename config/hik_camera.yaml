@@ -1,0 +1,30 @@
+/**:
+  ros__parameters:
+    serial: ""                  # 空 = 自动选第一台；多相机时填序列号（如 DA7585267）
+    exposure_us: 30000.0        # 曝光 40ms(标定用,板子静止无运动模糊顾虑)
+    gain_db: 0.0                # 增益 6dB
+    fps: 15.0                   # 目标帧率
+    # 触发设置（硬件同步：相机由外部信号触发时把 trigger_mode 改为 1）
+    trigger_mode: 1               # 0=连续采集(自由运行) 1=外部触发
+    trigger_source: "Line0"       # 外部触发信号源: Line0/Line1
+    trigger_polarity: "RisingEdge"  # 触发极性: RisingEdge(上升沿)/FallingEdge(下降沿)
+    # ---- 时间基准对齐（相机无时间码，必须开机自测，不要写死）----
+    time_offset_auto: true        # 开机自动测量"墙钟-雷达时钟"差并自动对齐(推荐 true)
+    sync_ref_topic: "/livox/imu"  # 参考时钟源，需与雷达同一硬件基准
+    sync_ref_type: "auto"         # auto|imu|custom|pointcloud2
+    sync_ref_samples: 30          # 取多少帧参考数据求中位数(200Hz 下约 0.15s)
+    sync_ref_timeout: 20.0        # 超过该秒数仍无参考时钟 -> 持续报错并暂停发图(不发错时间戳)
+    sync_warn_s: 0.2              # 运行中相机-参考时钟偏差超此值告警(秒)
+    time_offset: 0.0              # 手动 trim(秒)，自动对齐后仍可微调，一般保持 0
+    width: 0                    # 0=原始宽度；//内参对应 1280x1024,分辨率勿改
+    height: 0                   # 0=原始高度；
+    frame_id: "camera_optical_frame"
+    image_topic: "/left_camera/image"
+    camera_info_topic: "/left_camera/camera_info"
+    qos: "reliable"             # reliable=可靠传输(Fast-LIVO2 需要)；sensor_data=尽力传输(标定/RViz)
+    # 相机内参：标定后填写，未标定时为 0（FAST-LIVO2 跑 LIVO 前必须填）
+    fx: 1302.13518   #内参矩阵 K
+    fy: 1301.72786
+    cx: 641.92805
+    cy: 494.82537
+    distortion: [-0.077573, 0.131013, 0.000490, 0.001257, 0.0]  #畸变系数 D
